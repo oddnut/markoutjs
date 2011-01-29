@@ -7,127 +7,181 @@
 
 (function(global, document){
 
-	var Markout, XHTMLTags, i;
+	var Markout,
+
+		OBJECT			= 'object',
+		STRING			= 'string',
+		ARRAY_OBJECT	= '[object Array]',
+		SPACE			= ' ',
+
+		domNode			= document.createElement('div'),
+
+		toString		= Object.prototype.toString,
+		slice			= Array.prototype.slice,
+		isObject		= function(o){ return ( o && typeof o === OBJECT ); },
+		isString		= function(o){ return typeof o === STRING; },
+		isArray			= function(o){ return toString.call(o) === ARRAY_OBJECT };
 	
-	Markout = function( container ) {
+	Markout = function () {
 		
 		// make the constructor an optional factory
-		if ( ! (this instanceof arguments.callee) ) {
-			return new arguments.callee( container );
+		var m = this;
+		if ( ! (m && m.hasOwnProperty && (m instanceof Markout))) {
+			m = new Markout();
 		}
-		
-		// check that container is an Element or DocumentFragment Node
-		if ( container && ( container.nodeType === 1 || container.nodeType === 11 ) ) {
-			this._node = container;
-		} else {
-			this._node = this._doc.createDocumentFragment();
-		}
-		
+		return m._init.apply(m, arguments);
 	};
 	
 	Markout.prototype = {
 	
+		_init : function (container) {
+			
+			this.constructor = Markout;
+
+			// check that container is an Element or DocumentFragment Node
+			if (container && (container.nodeType === 1 || container.nodeType === 11)) {
+				this._node = container;
+			} else {
+				this._node = document.createDocumentFragment();
+			}
+
+			return this;
+		},
+		
+		toHTML : function () {
+			
+			var tmpNode;
+			
+			if (domNode.outerHTML) {
+				return this._node.outerHTML;
+			} else {
+				tmpNode = document.createDocumentFragment();
+				tmpNode.appendChild(this._node.cloneNode(true));
+				return tmpNode.innerHTML;
+			}
+		},
+				
+		node : function () {
+			
+			return this._node;
+		},
+		
 		getDOMNode : function() {
 			
 			return this._node;
 		},
 		
-		el : function( element, attrs ) {
+		html : function (html) {
 			
-			var childHTML;
-			
-			// create a new Element Node or use the one passed
-			element = typeof element === 'string' ? this._doc.createElement( element ) : element;
-			if ( element.nodeType !== 1 ) {
+			if (isString(html)) {
+				this._node.innerHTML = html;
 				return this;
 			}
 			
-			// create a new HTML instance with the element as the container
-			childHTML = this._createChild( element );
-			childHTML.attrs( attrs );
-			this._node.appendChild( childHTML.getDOMNode() );
-			
-			return childHTML;
+			return this._node.innerHTML;
 		},
 		
-		attrs : function( attrs ) {
+		el : function () {
+			
+			var args	= slice.call(arguments, 0),
+				element	= args[0],
+				attrs	= args[1] && isObject(args[1]) ? args[1] : null,
+				text	= ! attrs && args[1] && isString(args[1]) ? args[1] : args[2],
+				child;
+			
+			if ( ! element) { return this; }
+
+			// create a new Element Node or use the one passed
+			if (isString(element)) {
+				element = document.createElement(element);
+			}
+			
+			// we need something valid here
+			if ( ! (element && element.nodeType === 1)) { return this; } // weird? should throw error?
+			
+			// create a new Markout instance with the element as the container
+			child = new this.constructor(element)
+			if (attrs) { child.attrs(attrs); }
+			if (text) { child.text(text); }
+			this._node.appendChild(child._node);
+			return child;
+		},
+		
+		attrs : function (attrs) {
 			
 			var node = this._node,
 				key;
+				
 			attrs = attrs || {};
-			
-			for ( key in attrs ) {
-				if ( node[key] !== undefined ) {
+			for (key in attrs) {
+				if (node[key] !== undefined) {
 					node[key] = attrs[key];
 				}
 			}
 		},
 		
-		text : function() {
+		text : function () {
 			
-			var args, textNode, i;
-			
-			// check for an array being passed
-			if ( Object.prototype.toString.call( arguments[0] ) === '[object Array]' ) {
-				args = arguments[0];
-			} else {
-				args = [];
-				for ( i = 0; i < arguments.length; i++ ) {
-					args.push( arguments[i] );
-				}
-			}
+			var args		= slice.call(arguments, 0),
+				text		= (isArray(args[0]) ? args[0] : args).join(''),
+				textNode	= text ? document.createTextNode(text) : null;
 			
 			// append the Text Node to the container
-			textNode = this._doc.createTextNode( args.join('') );
-			this._node.appendChild( textNode );
-			
+			if (textNode) {
+				this._node.appendChild(textNode);
+			}
 			return textNode;
 		},
 		
-		space : function() {
+		space : function () {
 			
-			return this.text(' ');
-		},
-		
-		_doc : document,
-		
-		_createChild : function( element ) {
-			
-			return new Markout( element );
+			return this.text(SPACE);
 		}
 		
 	};
 	
-	Markout.addElShorthand = function( tag ) {
+	Markout.addElMethod = function (tag) {
 		
-		Markout.prototype[ tag ] = function( attrs ) { return this.el( tag, attrs ); };
+		Markout.prototype[tag] = function(){
+			var args = slice.call(arguments, 0);
+			args.unshift(tag);
+			return this.el.apply(this, args);
+		};
 	};
-	
-	XHTMLTags = [
-		'a', 'abbr', 'acronym', 'address', 'area',
-		'b', 'base', 'bdo', 'big', 'blockquote', /*'body',*/ 'br', 'button',
-		'caption', 'cite', 'code', 'col', 'colgroup',
-		'dd', 'del', 'dfn', 'div', 'dl', 'dt',
-		'em',
-		'fieldset', 'form',
-		'h1', 'h2', 'h3', 'h4', 'h5', 'h6', /*'head',*/ 'hr', /*'html',*/
-		'i', 'img', 'input', 'ins',
-		'kbd',
-		'label', 'legend', 'li', 'link',
-		'map', 'meta',
-		/*'noscript',*/
-		'object', 'ol', 'optgroup', 'option',
-		'p', 'param', 'pre',
-		'q',
-		'samp', 'script', 'select', 'small', 'span', 'strong', 'style', 'sub', 'sup',
-		'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'title', 'tr', 'tt',
-		'ul'
-		/*'var'*/
-	];
-	
-	for ( i = 0; i < XHTMLTags.length; i++ ) {
-		Markout.addElShorthand( XHTMLTags[i] );
-	}
+
+	(function(){
+		
+		var tags, i, len;
+
+		tags = (
+			'a abbr acronym address area article aside audio ' +
+			'b base bdi bdo big blockquote body br button ' +
+			'canvas caption cite code col colgroup command ' + 
+			'datalist dd del details device dfn div dl dt ' + 
+			'em embed ' +
+			'fieldset figcaption figure footer form ' +
+			'h1 h2 h3 h4 h5 h6 head header hgroup hr ' +
+			'i iframe img input ins ' +
+			'kbd keygen ' + 
+			'label legend li link ' +
+			'map mark menu meta meter ' +
+			'nav noscript ' +
+			'object ol optgroup option ' +
+			'p param pre progress ' +
+			'q ' +
+			'rp rt ruby ' + 
+			's samp script section select small source span strong style sub summary sup ' +
+			'table tbody td textarea tfoot th thread time title tr track tt ' +
+			'ul ' + 
+			'var video ' +
+			'wbr'
+		).split(SPACE);
+
+		for (i = 0, len = tags.length; i < len; i++) {
+			Markout.addElMethod(tags[i]);
+		}
+
+	}());
 	
 	global.Markout = Markout;
 
