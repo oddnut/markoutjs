@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Markout Memory Tests</title>
+		<script src="../markout.js"></script>
+	</head>
+	
+	<body>
+		<script>
+			setTimeout(function(){
+				
+				var body = Markout(document.body),
+					i = 0,
+					timer;
+
+				for (i = 0; i < 10000; i++) {
+					var h1 = body.h1();
+					h1.a({ href: 'http://oddnut.com/markout' }, 'Markout');
+					h1.text(' Memory Test: ' + i);
+				}
+
+				setTimeout(function(){
+					body.html('');
+				}, 10000);
+
+			}, 5000);
+		</script>
+	</body>
+</html>

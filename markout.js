@@ -29,7 +29,7 @@
 		if ( ! (self && self.hasOwnProperty && (self instanceof Markout))) {
 			self = new Markout();
 		}
-		self._init.apply(m, arguments);
+		self._init.apply(self, arguments);
 		return self;
 	};
 	

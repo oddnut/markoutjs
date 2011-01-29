@@ -8,24 +8,7 @@
 	
 	<body>
 		<script>
-			setTimeout(function(){
-				
-				var body = Markout(document.body),
-					i = 0,
-					timer;
-
-				for (i = 0; i < 10000; i++) {
-					var h1 = body.h1();
-					h1.text('Manual ');
-					h1.a({ href: 'http://oddnut.com/markout' }, 'Markout');
-					h1.text(' Tests: ' + i);
-				}
-
-				setTimeout(function(){
-					body.html('');
-				}, 10000);
-
-			}, 5000);
+			Markout(document.body).h1('Manual Markout Tests');
 		</script>
 	</body>
 </html>
