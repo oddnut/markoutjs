@@ -25,18 +25,20 @@
 	Markout = function () {
 		
 		// make the constructor an optional factory
-		var m = this;
-		if ( ! (m && m.hasOwnProperty && (m instanceof Markout))) {
-			m = new Markout();
+		var self = this;
+		if ( ! (self && self.hasOwnProperty && (self instanceof Markout))) {
+			self = new Markout();
 		}
-		return m._init.apply(m, arguments);
+		self._init.apply(m, arguments);
+		return self;
 	};
 	
 	Markout.prototype = {
 	
+		// explicity set constructor and allow extension
+		constructor : Markout,
+
 		_init : function (container) {
-			
-			this.constructor = Markout;
 
 			// check that container is an Element or DocumentFragment Node
 			if (container && (container.nodeType === 1 || container.nodeType === 11)) {
@@ -44,8 +46,6 @@
 			} else {
 				this._node = document.createDocumentFragment();
 			}
-
-			return this;
 		},
 		
 		toHTML : function () {

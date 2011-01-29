@@ -1,0 +1,194 @@
+{
+	"buffers":
+	[
+		{
+			"file": "/Users/eferraiuolo/Tools/markoutjs/markout.js",
+			"settings":
+			{
+				"buffer_size": 4320,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/eferraiuolo/Tools/markoutjs/tests/manual.html",
+			"settings":
+			{
+				"buffer_size": 522,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/eferraiuolo/Tools/urljs/url.js",
+			"settings":
+			{
+				"buffer_size": 17784,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"file_history":
+	[
+		"/Users/eferraiuolo/Library/Application Support/Sublime Text 2/Packages/Default/Base File.sublime-settings",
+		"/Users/eferraiuolo/Library/Application Support/Sublime Text 2/Packages/User/Base File.sublime-settings",
+		"/Users/eferraiuolo/Desktop/sublinetext test.js"
+	],
+	"find_in_files":
+	{
+		"include_history":
+		[
+		],
+		"location_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"HTMLTags",
+			"container",
+			"global"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer": false,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/eferraiuolo/Tools/markoutjs/markout.js",
+					"settings":
+					{
+						"buffer_size": 4320,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2527,
+								2532
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/eferraiuolo/Tools/markoutjs/tests/manual.html",
+					"settings":
+					{
+						"buffer_size": 522,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								473,
+								473
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"translate_tabs_to_spaces": false,
+							"word_wrap": false
+						},
+						"translation.x": 0,
+						"translation.y": 0,
+						"zoom_level": 1
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/eferraiuolo/Tools/urljs/url.js",
+					"settings":
+					{
+						"buffer_size": 17784,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1954,
+								1954
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0,
+						"translation.y": 787,
+						"zoom_level": 1
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0,
+			1
+		],
+		"rows":
+		[
+			0,
+			1
+		]
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0,
+		"selected_items":
+		[
+		],
+		"width": 0
+	},
+	"show_minimap": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150,
+	"status_bar_visible": true
+}
