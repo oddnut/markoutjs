@@ -13,14 +13,20 @@
 		STRING			= 'string',
 		ARRAY_OBJECT	= '[object Array]',
 		SPACE			= ' ',
-
+		
+		FOR				= 'for',
+		HTML_FOR		= 'htmlFor',
+		CLASS			= 'class',
+		CLASS_NAME		= 'className',
+		CUSTOM_ATTRS	= {}, 
+		
 		domNode			= document.createElement('div'),
 
 		toString		= Object.prototype.toString,
 		slice			= Array.prototype.slice,
 		isObject		= function(o){ return ( o && typeof o === OBJECT ); },
 		isString		= function(o){ return typeof o === STRING; },
-		isArray			= function(o){ return toString.call(o) === ARRAY_OBJECT };
+		isArray			= function(o){ return toString.call(o) === ARRAY_OBJECT; };
 	
 	Markout = function () {
 		
@@ -100,7 +106,7 @@
 			if ( ! (element && element.nodeType === 1)) { return this; } // weird? should throw error?
 			
 			// create a new Markout instance with the element as the container
-			child = new this.constructor(element)
+			child = new this.constructor(element);
 			if (attrs) { child.attrs(attrs); }
 			if (text) { child.text(text); }
 			this._node.appendChild(child._node);
@@ -109,13 +115,16 @@
 		
 		attrs : function (attrs) {
 			
-			var node = this._node,
-				key;
-				
 			attrs = attrs || {};
-			for (key in attrs) {
-				if (node[key] !== undefined) {
-					node[key] = attrs[key];
+			
+			var CUSTOM_ATTRS	= Markout.CUSTOM_ATTRS,
+				node			= this._node,
+				attr;
+				
+			for (attr in attrs) {
+				if (node && attr && node.setAttribute) {
+					attr = CUSTOM_ATTRS[attr] || attr;
+					node.setAttribute(attr, attrs[attr]);
 				}
 			}
 		},
@@ -139,6 +148,16 @@
 		}
 		
 	};
+	
+	if ( ! document.documentElement.hasAttribute) { // IE < 8
+		CUSTOM_ATTRS[ FOR ]		= HTML_FOR;
+		CUSTOM_ATTRS[ CLASS ]	= CLASS_NAME;
+	} else { // W3C
+		CUSTOM_ATTRS[ HTML_FOR ]	= FOR;
+		CUSTOM_ATTRS[ CLASS_NAME ]	= CLASS;
+	}
+	
+	Markout.CUSTOM_ATTRS = CUSTOM_ATTRS;
 	
 	Markout.addElMethod = function (tag) {
 		
