@@ -24,6 +24,7 @@
 
 		toString		= Object.prototype.toString,
 		slice			= Array.prototype.slice,
+		owns			= function(o, k){ return o && o.hasOwnProperty && o.hasOwnProperty(k); },
 		isObject		= function(o){ return ( o && typeof o === OBJECT ); },
 		isString		= function(o){ return typeof o === STRING; },
 		isArray			= function(o){ return toString.call(o) === ARRAY_OBJECT; };
@@ -120,10 +121,12 @@
 			var CUSTOM_ATTRS	= Markout.CUSTOM_ATTRS,
 				node			= this._node,
 				attr;
-				
+			
+			if ( ! node) { return; }
+			
 			for (attr in attrs) {
-				if (node && attr && node.setAttribute) {
-					attr = CUSTOM_ATTRS[attr] || attr;
+				attr = CUSTOM_ATTRS[attr] || attr;
+				if (owns(attrs, attr)) {
 					node.setAttribute(attr, attrs[attr]);
 				}
 			}
@@ -150,8 +153,8 @@
 	};
 	
 	if ( ! document.documentElement.hasAttribute) { // IE < 8
-		CUSTOM_ATTRS[ FOR ]		= HTML_FOR;
-		CUSTOM_ATTRS[ CLASS ]	= CLASS_NAME;
+		CUSTOM_ATTRS[ FOR ]			= HTML_FOR;
+		CUSTOM_ATTRS[ CLASS ]		= CLASS_NAME;
 	} else { // W3C
 		CUSTOM_ATTRS[ HTML_FOR ]	= FOR;
 		CUSTOM_ATTRS[ CLASS_NAME ]	= CLASS;
@@ -170,7 +173,8 @@
 
 	(function(){
 		
-		var tags, i, len;
+		var addElMethod = Markout.addElMethod,
+			tags, i, len;
 
 		tags = (
 			'a abbr acronym address area article aside audio ' +
@@ -197,7 +201,7 @@
 		).split(SPACE);
 
 		for (i = 0, len = tags.length; i < len; i++) {
-			Markout.addElMethod(tags[i]);
+			addElMethod(tags[i]);
 		}
 
 	}());
