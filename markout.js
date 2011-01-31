@@ -2,7 +2,7 @@
  * MarkoutJS - An API for creating DOM nodes in JavaScript
  * 
  * Oddnut Software - http://oddnut.com/markout/
- * Copyright (c) 2009-2010 Eric Ferraiuolo and David Fogel
+ * Copyright (c) 2009-2011 Eric Ferraiuolo and David Fogel
  */
 
 (function(global, document){
